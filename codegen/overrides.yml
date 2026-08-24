@@ -1,0 +1,14 @@
+post-page:
+  required_body_params:
+    - parent
+  body_requirement_variants:
+    - - parent
+upload-file:
+  required_body_params:
+    - data
+    - filename
+    - content_type
+  body_requirement_variants:
+    - - data
+      - filename
+      - content_type
