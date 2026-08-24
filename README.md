@@ -5,6 +5,7 @@
 </p>
 
 <p align="center">
+  <a href="https://rubygems.org/gems/notion-client-ruby"><img src="https://img.shields.io/gem/v/notion-client-ruby.svg?colorB=319e8c" alt="Gem Version"></a>
   <a href="https://github.com/ydah/notion-client-ruby/actions/workflows/main.yml"><img src="https://github.com/ydah/notion-client-ruby/actions/workflows/main.yml/badge.svg" alt="CI"></a>
   <img src="https://img.shields.io/badge/ruby-%3E%3D%203.2-ruby.svg" alt="Ruby Version">
   <a href="LICENSE.txt"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License"></a>
