@@ -1,6 +1,23 @@
 # notion-client-ruby
 
-A dependency-free Ruby client for the current Notion Public API. It covers all 45 paths in the official OpenAPI document, preserves unknown response fields, retries transient failures, and supports API versions `2022-06-28`, `2025-09-03`, and `2026-03-11`.
+A modern, dependency-free Ruby client for the Notion API.
+
+[![CI](https://github.com/ydah/notion-client-ruby/actions/workflows/main.yml/badge.svg)](https://github.com/ydah/notion-client-ruby/actions/workflows/main.yml)
+
+[Features](#features) · [Installation](#installation) · [Quick Start](#quick-start) · [Configuration](#configuration) · [Guides](#guides) · [Development](#development)
+
+---
+
+`notion-client-ruby` provides a small, resilient interface to the current Notion Public API. It covers the bundled official OpenAPI document while keeping raw requests available for newly released endpoints.
+
+## Features
+
+- Supports Notion API versions `2022-06-28`, `2025-09-03`, and `2026-03-11`
+- Exposes generated endpoint groups for the complete bundled API specification
+- Preserves unknown response fields for forward compatibility
+- Handles pagination, retries, rate limiting, logging, and instrumentation
+- Includes query and block builders, concurrent batches, uploads, OAuth, and webhooks
+- Supports Ruby 3.2 through 4.0 with no runtime dependencies
 
 ## Installation
 
@@ -10,24 +27,29 @@ Until the first RubyGems release, install from a local checkout:
 gem "notion-client-ruby", path: "../notion-client-ruby"
 ```
 
-Then:
+Then require the library:
 
 ```ruby
 require "notion"
-
-client = Notion::Client.new(token: ENV.fetch("NOTION_TOKEN"))
-me = client.users.me
-puts me.name
 ```
 
-## Usage
+Ruby 3.2 or newer is required.
 
-Generated endpoint groups mirror the API:
+## Quick Start
+
+Create a client with an integration token and call an endpoint group:
 
 ```ruby
+client = Notion::Client.new(token: ENV.fetch("NOTION_TOKEN"))
+
+me = client.users.me
 page = client.pages.retrieve(page_id: "...")
 client.pages.update(page_id: page.id, in_trash: true)
+```
 
+Queries can be built with Ruby methods and paginated lazily:
+
+```ruby
 client.data_sources.query(data_source_id: "...") do |query|
   query.where(:Name).contains("roadmap")
   query.order(:Created, direction: :descending)
@@ -45,40 +67,40 @@ end
 client.blocks.append_children(block_id: "...", children: children)
 ```
 
-Raw requests remain available for endpoints newer than the bundled spec:
+For endpoints newer than the bundled specification, use a raw request:
 
 ```ruby
 client.request(:get, "/v1/users/me")
 ```
 
-Configuration can be shared:
+## Configuration
+
+Configure shared defaults before creating clients:
 
 ```ruby
+require "logger"
+
 Notion.configure do |config|
   config.token = ENV.fetch("NOTION_TOKEN")
   config.notion_version = "2026-03-11"
   config.timeout = { open: 5, read: 65 }
   config.retry = { max_attempts: 5, cap: 30 }
-  config.rate_limit = { rate: 3.0, burst: 6, store: :memory }
-  config.cache = Rails.cache if defined?(Rails.cache)
+  config.rate_limit = { rate: 3.0, burst: 6 }
   config.logger = Logger.new($stdout)
 end
 ```
 
-File uploads, OAuth, webhooks, enhanced Markdown endpoints, local Markdown conversion, async task polling, and view query cleanup are included. See [`docs/recipes`](docs/recipes).
+| Option | Default | Description |
+| --- | --- | --- |
+| `token` | `ENV["NOTION_TOKEN"]` | Notion integration token |
+| `notion_version` | `ENV["NOTION_API_VERSION"]` or `2026-03-11` | API version sent with requests |
+| `timeout` | `{ open: 5, read: 65 }` | Connection and response timeouts in seconds |
+| `retry` | `{ max_attempts: 5, cap: 30 }` | Retry limit and maximum backoff in seconds |
+| `rate_limit` | `{ rate: 3.0, burst: 6 }` | Client-side request rate and burst capacity |
+| `logger` | `nil` | Logger used for structured request logs |
+| `cache` | `nil` | Optional Rails-compatible cache store |
 
-## Development
-
-```sh
-bundle install
-bundle exec rake
-```
-
-`rake` runs specs and generated-code verification. Live tests require the variables documented in `.env.example` and are intentionally not run for pull requests from forks.
-
-With a test connection and writable parent page configured, `bundle exec rake test:bootstrap` creates the database and two data sources required by compatibility smoke tests and prints their IDs.
-
-The supported Ruby matrix is 3.2–4.0. `require "notion"` is kept below 50ms and parsing 1,000 pages below 200ms; run `benchmark/load.rb` and `benchmark/objects.rb` to verify both budgets. Clients are thread-safe; Ractor sharing is not supported.
+Options passed to `Notion::Client.new` override the shared configuration for that client.
 
 Run independent requests concurrently while preserving result order:
 
@@ -90,6 +112,26 @@ end
 
 APIs under `client.experimental` may change outside the normal semantic-versioning guarantees.
 
+## Guides
+
+- [Pagination](docs/recipes/pagination.md)
+- [File uploads](docs/recipes/uploads.md)
+- [OAuth](docs/recipes/oauth.md)
+- [Webhooks](docs/recipes/webhooks.md)
+- [Page synchronization](docs/recipes/page-sync.md)
+- [CSV import](docs/recipes/csv-import.md)
+
+## Development
+
+```sh
+bundle install
+bundle exec rake
+```
+
+`rake` runs the specs and verifies generated code. Live tests use the variables documented in [`.env.example`](.env.example) and are not run for pull requests from forks.
+
+The library keeps `require "notion"` below 50ms and parses 1,000 pages below 200ms. Run `benchmark/load.rb` and `benchmark/objects.rb` to verify both budgets.
+
 ## License
 
-MIT
+[MIT](LICENSE.txt)
