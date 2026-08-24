@@ -1,0 +1,10 @@
+/.bundle/
+/.idea/
+/.vscode/
+/coverage/
+/pkg/
+/spec/reports/
+/tmp/
+Gemfile.lock
+.rspec_status
+*.gem
