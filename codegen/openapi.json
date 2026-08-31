@@ -22354,6 +22354,7 @@
 																	"properties": {
 																		"old_str": {
 																			"type": "string",
+																			"minLength": 1,
 																			"description": "The existing content string to find and replace. Must exactly match the page content."
 																		},
 																		"new_str": {
@@ -22627,6 +22628,7 @@
 			"get": {
 				"summary": "Retrieve an async task",
 				"operationId": "retrieve-async-task",
+				"x-notion-sdk-method": "asyncTasks.retrieve",
 				"tags": ["Async tasks"],
 				"x-codeSamples": [
 					{
@@ -28280,6 +28282,7 @@
 			"post": {
 				"summary": "Create a comment",
 				"operationId": "create-a-comment",
+				"x-notion-sdk-method": "comments.create",
 				"tags": ["Comments"],
 				"x-codeSamples": [
 					{
@@ -28648,6 +28651,7 @@
 			"get": {
 				"summary": "List comments",
 				"operationId": "list-comments",
+				"x-notion-sdk-method": "comments.list",
 				"tags": ["Comments"],
 				"x-codeSamples": [
 					{
@@ -33457,7 +33461,7 @@
 												]
 											},
 											"maxItems": 100,
-											"description": "Meeting note transcription block objects."
+											"description": "Meeting note block objects."
 										},
 										"has_more": {
 											"type": "boolean",
@@ -33587,6 +33591,7 @@
 			"post": {
 				"summary": "Query agents",
 				"operationId": "query-agents",
+				"x-notion-sdk-method": "agents.query",
 				"tags": ["Agents"],
 				"x-codeSamples": [
 					{
@@ -36307,7 +36312,6 @@
 																					"enum": [
 																						"asana",
 																						"box",
-																						"browser",
 																						"calendar",
 																						"computer",
 																						"confluence",
@@ -36328,6 +36332,7 @@
 																						"marketplace",
 																						"memory",
 																						"microsoft_teams",
+																						"microsoft_teams_oauth",
 																						"outlook",
 																						"salesforce",
 																						"search",
@@ -36420,6 +36425,7 @@
 																			"failure_limit",
 																			"mark_session_failed_autopause",
 																			"disabled_from_workspace_settings",
+																			"disabled_from_workspace_settings_but_resumable",
 																			"disabled_from_api",
 																			"disabled_from_agent_settings",
 																			"disabled_due_to_no_members_with_access",
@@ -36429,7 +36435,7 @@
 																			"needs_user_review",
 																			"tool_unavailable"
 																		],
-																		"description": "One of: `run_limit`, `credit_limit`, `runaway_credit_usage`, `workspace_credit_limit`, `failure_limit`, `mark_session_failed_autopause`, `disabled_from_workspace_settings`, `disabled_from_api`, `disabled_from_agent_settings`, `disabled_due_to_no_members_with_access`, `disabled_due_to_lack_of_editors`, `disabled_by_notion`, `internal_error`, `needs_user_review`, `tool_unavailable`"
+																		"description": "One of: `run_limit`, `credit_limit`, `runaway_credit_usage`, `workspace_credit_limit`, `failure_limit`, `mark_session_failed_autopause`, `disabled_from_workspace_settings`, `disabled_from_workspace_settings_but_resumable`, `disabled_from_api`, `disabled_from_agent_settings`, `disabled_due_to_no_members_with_access`, `disabled_due_to_lack_of_editors`, `disabled_by_notion`, `internal_error`, `needs_user_review`, `tool_unavailable`"
 																	},
 																	{
 																		"type": "null"
@@ -37393,7 +37399,6 @@
 																					"enum": [
 																						"asana",
 																						"box",
-																						"browser",
 																						"calendar",
 																						"computer",
 																						"confluence",
@@ -37414,6 +37419,7 @@
 																						"marketplace",
 																						"memory",
 																						"microsoft_teams",
+																						"microsoft_teams_oauth",
 																						"outlook",
 																						"salesforce",
 																						"search",
@@ -37810,6 +37816,7 @@
 			"get": {
 				"summary": "Get agent",
 				"operationId": "get-agent",
+				"x-notion-sdk-method": "agents.retrieve",
 				"tags": ["Agents"],
 				"x-codeSamples": [
 					{
@@ -38576,7 +38583,6 @@
 																"enum": [
 																	"asana",
 																	"box",
-																	"browser",
 																	"calendar",
 																	"computer",
 																	"confluence",
@@ -38597,6 +38603,7 @@
 																	"marketplace",
 																	"memory",
 																	"microsoft_teams",
+																	"microsoft_teams_oauth",
 																	"outlook",
 																	"salesforce",
 																	"search",
@@ -38689,6 +38696,7 @@
 														"failure_limit",
 														"mark_session_failed_autopause",
 														"disabled_from_workspace_settings",
+														"disabled_from_workspace_settings_but_resumable",
 														"disabled_from_api",
 														"disabled_from_agent_settings",
 														"disabled_due_to_no_members_with_access",
@@ -38698,7 +38706,7 @@
 														"needs_user_review",
 														"tool_unavailable"
 													],
-													"description": "One of: `run_limit`, `credit_limit`, `runaway_credit_usage`, `workspace_credit_limit`, `failure_limit`, `mark_session_failed_autopause`, `disabled_from_workspace_settings`, `disabled_from_api`, `disabled_from_agent_settings`, `disabled_due_to_no_members_with_access`, `disabled_due_to_lack_of_editors`, `disabled_by_notion`, `internal_error`, `needs_user_review`, `tool_unavailable`"
+													"description": "One of: `run_limit`, `credit_limit`, `runaway_credit_usage`, `workspace_credit_limit`, `failure_limit`, `mark_session_failed_autopause`, `disabled_from_workspace_settings`, `disabled_from_workspace_settings_but_resumable`, `disabled_from_api`, `disabled_from_agent_settings`, `disabled_due_to_no_members_with_access`, `disabled_due_to_lack_of_editors`, `disabled_by_notion`, `internal_error`, `needs_user_review`, `tool_unavailable`"
 												},
 												{
 													"type": "null"
@@ -39138,6 +39146,7 @@
 			"delete": {
 				"summary": "Delete agent",
 				"operationId": "delete-agent",
+				"x-notion-sdk-method": "agents.delete",
 				"tags": ["Agents"],
 				"x-codeSamples": [
 					{
@@ -39314,6 +39323,7 @@
 			"get": {
 				"summary": "Get agent insights",
 				"operationId": "get-agent-insights",
+				"x-notion-sdk-method": "agents.retrieveInsights",
 				"tags": ["Agents"],
 				"x-codeSamples": [
 					{
@@ -39378,15 +39388,28 @@
 											"description": "Always `agent_insights`"
 										},
 										"id": {
-											"$ref": "#/components/schemas/idResponse"
+											"oneOf": [
+												{
+													"$ref": "#/components/schemas/idResponse"
+												},
+												{
+													"type": "string",
+													"const": "notion_ai",
+													"description": "Always `notion_ai`"
+												}
+											]
 										},
 										"name": {
 											"type": "string"
 										},
 										"agent_type": {
 											"type": "string",
-											"enum": ["custom_agent", "autofill_custom_agent"],
-											"description": "One of: `custom_agent`, `autofill_custom_agent`"
+											"enum": [
+												"notion_ai",
+												"custom_agent",
+												"autofill_custom_agent"
+											],
+											"description": "One of: `notion_ai`, `custom_agent`, `autofill_custom_agent`"
 										},
 										"status": {
 											"type": "string",
@@ -39405,6 +39428,7 @@
 														"failure_limit",
 														"mark_session_failed_autopause",
 														"disabled_from_workspace_settings",
+														"disabled_from_workspace_settings_but_resumable",
 														"disabled_from_api",
 														"disabled_from_agent_settings",
 														"disabled_due_to_no_members_with_access",
@@ -39414,7 +39438,7 @@
 														"needs_user_review",
 														"tool_unavailable"
 													],
-													"description": "One of: `run_limit`, `credit_limit`, `runaway_credit_usage`, `workspace_credit_limit`, `failure_limit`, `mark_session_failed_autopause`, `disabled_from_workspace_settings`, `disabled_from_api`, `disabled_from_agent_settings`, `disabled_due_to_no_members_with_access`, `disabled_due_to_lack_of_editors`, `disabled_by_notion`, `internal_error`, `needs_user_review`, `tool_unavailable`"
+													"description": "One of: `run_limit`, `credit_limit`, `runaway_credit_usage`, `workspace_credit_limit`, `failure_limit`, `mark_session_failed_autopause`, `disabled_from_workspace_settings`, `disabled_from_workspace_settings_but_resumable`, `disabled_from_api`, `disabled_from_agent_settings`, `disabled_due_to_no_members_with_access`, `disabled_due_to_lack_of_editors`, `disabled_by_notion`, `internal_error`, `needs_user_review`, `tool_unavailable`"
 												},
 												{
 													"type": "null"
@@ -39681,6 +39705,7 @@
 														"failure_limit",
 														"mark_session_failed_autopause",
 														"disabled_from_workspace_settings",
+														"disabled_from_workspace_settings_but_resumable",
 														"disabled_from_api",
 														"disabled_from_agent_settings",
 														"disabled_due_to_no_members_with_access",
@@ -39690,7 +39715,7 @@
 														"needs_user_review",
 														"tool_unavailable"
 													],
-													"description": "One of: `run_limit`, `credit_limit`, `runaway_credit_usage`, `workspace_credit_limit`, `failure_limit`, `mark_session_failed_autopause`, `disabled_from_workspace_settings`, `disabled_from_api`, `disabled_from_agent_settings`, `disabled_due_to_no_members_with_access`, `disabled_due_to_lack_of_editors`, `disabled_by_notion`, `internal_error`, `needs_user_review`, `tool_unavailable`"
+													"description": "One of: `run_limit`, `credit_limit`, `runaway_credit_usage`, `workspace_credit_limit`, `failure_limit`, `mark_session_failed_autopause`, `disabled_from_workspace_settings`, `disabled_from_workspace_settings_but_resumable`, `disabled_from_api`, `disabled_from_agent_settings`, `disabled_due_to_no_members_with_access`, `disabled_due_to_lack_of_editors`, `disabled_by_notion`, `internal_error`, `needs_user_review`, `tool_unavailable`"
 												},
 												{
 													"type": "null"
@@ -40038,6 +40063,7 @@
 			"post": {
 				"summary": "Apply many agent operations",
 				"operationId": "agent-batch",
+				"x-notion-sdk-method": "agents.batch",
 				"tags": ["Agents"],
 				"x-codeSamples": [
 					{
@@ -40372,6 +40398,7 @@
 			"post": {
 				"summary": "Update a session",
 				"operationId": "update-session",
+				"x-notion-sdk-method": "sessions.update",
 				"tags": ["Sessions"],
 				"x-codeSamples": [
 					{
@@ -40751,6 +40778,7 @@
 			"get": {
 				"summary": "Retrieve a session",
 				"operationId": "retrieve-session",
+				"x-notion-sdk-method": "sessions.retrieve",
 				"tags": ["Sessions"],
 				"x-codeSamples": [
 					{
@@ -41169,6 +41197,7 @@
 			"post": {
 				"summary": "Query sessions",
 				"operationId": "query-sessions",
+				"x-notion-sdk-method": "sessions.query",
 				"tags": ["Sessions"],
 				"x-codeSamples": [
 					{
@@ -42732,6 +42761,7 @@
 			"post": {
 				"summary": "Query session events",
 				"operationId": "query-session-events",
+				"x-notion-sdk-method": "sessions.queryEvents",
 				"tags": ["Sessions"],
 				"x-codeSamples": [
 					{
@@ -45752,6 +45782,7 @@
 			"post": {
 				"summary": "Cancel a session",
 				"operationId": "cancel-session",
+				"x-notion-sdk-method": "sessions.cancel",
 				"tags": ["Sessions"],
 				"x-codeSamples": [
 					{
