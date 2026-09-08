@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="A modern, dependency-free Ruby client for the Notion API.">
+    <meta name="theme-color" content="#ffffff">
+    <title>notion-client-ruby</title>
+    <link rel="stylesheet" href="./style.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="notion-client-ruby home">
+        <span class="brand-mark" aria-hidden="true">N</span>
+        <span>notion-client-ruby</span>
+      </a>
+      <nav aria-label="Main navigation">
+        <a href="#why">Why this client</a>
+        <a href="#install">Install</a>
+        <a class="github-link" href="https://github.com/ydah/notion-client-ruby">View on GitHub</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="status">Ruby 3.2+ · No runtime dependencies</p>
+          <h1 id="hero-title" class="text-balance">Notion API client for Ruby.</h1>
+          <p class="lede text-pretty">
+            Pages, databases, blocks, uploads, OAuth, and webhooks.
+            No runtime dependencies.
+          </p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#install">Add to your Gemfile</a>
+            <a class="button button-secondary" href="https://github.com/ydah/notion-client-ruby#quick-start">Read the docs</a>
+          </div>
+        </div>
+
+        <figure class="code-window" aria-label="Ruby quick start example">
+          <figcaption>
+            <span>quick_start.rb</span>
+            <span class="ruby-version">Ruby</span>
+          </figcaption>
+          <pre><code><span class="code-muted"># One client. The whole workspace.</span>
+<span class="code-keyword">require</span> <span class="code-string">"notion"</span>
+
+client = Notion::Client.new(
+  token: ENV.fetch(<span class="code-string">"NOTION_TOKEN"</span>)
+)
+
+client.data_sources.query(
+  data_source_id: <span class="code-string">"..."</span>
+) <span class="code-keyword">do</span> |query|
+  query.where(<span class="code-symbol">:Name</span>).contains(<span class="code-string">"roadmap"</span>)
+  query.order(<span class="code-symbol">:Created</span>, direction: <span class="code-symbol">:descending</span>)
+<span class="code-keyword">end</span>.each_result { |page| puts page.title }</code></pre>
+        </figure>
+      </section>
+
+      <section class="proof" aria-label="Project highlights">
+        <p><strong class="tabular-nums">3</strong> supported API versions</p>
+        <p><strong>100%</strong> bundled OpenAPI coverage</p>
+        <p><strong class="tabular-nums">0</strong> runtime dependencies</p>
+      </section>
+
+      <section class="features" id="why" aria-labelledby="features-title">
+        <div class="section-intro">
+          <h2 id="features-title" class="text-balance">What it handles</h2>
+          <p class="text-pretty">
+            Use the generated API methods, or drop down to a raw request for
+            endpoints newer than the bundled specification.
+          </p>
+        </div>
+
+        <div class="feature-grid">
+          <article class="feature feature-wide">
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 6h16M4 12h10M4 18h13"/></svg>
+            <h3>Queries and response objects</h3>
+            <p class="text-pretty">Generated endpoint groups, response objects that preserve unknown fields, and a schema-aware query builder.</p>
+            <code>query.where(:Status).equals("Ready")</code>
+          </article>
+          <article class="feature">
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3v18M4.5 7.5 12 3l7.5 4.5M4.5 16.5 12 21l7.5-4.5"/></svg>
+            <h3>API version compatibility</h3>
+            <p class="text-pretty">Supports Notion API versions 2022-06-28, 2025-09-03, and 2026-03-11.</p>
+          </article>
+          <article class="feature">
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 4 7v5c0 4.6 3.2 7.8 8 9 4.8-1.2 8-4.4 8-9V7l-8-4Z"/><path d="m8.5 12 2.2 2.2 4.8-5"/></svg>
+            <h3>Request middleware</h3>
+            <p class="text-pretty">Retries, rate limiting, timeouts, logging, and instrumentation are included.</p>
+          </article>
+          <article class="feature feature-dark">
+            <p class="feature-quote text-balance">Use new endpoints before the next release.</p>
+            <code>client.request(:get, "/v1/users/me")</code>
+          </article>
+        </div>
+      </section>
+
+      <section class="install" id="install" aria-labelledby="install-title">
+        <div>
+          <h2 id="install-title" class="text-balance">Installation</h2>
+          <p class="text-pretty">The first release is installed directly from GitHub.</p>
+        </div>
+        <div class="install-command">
+          <span>Gemfile</span>
+          <code>gem "notion-client-ruby", github: "ydah/notion-client-ruby"</code>
+        </div>
+        <a class="button button-primary" href="https://github.com/ydah/notion-client-ruby#installation">Open installation guide</a>
+      </section>
+    </main>
+
+    <footer>
+      <p>Built for Rubyists working in Notion.</p>
+      <p><a href="https://github.com/ydah/notion-client-ruby/blob/main/LICENSE.txt">MIT License</a> · <a href="https://github.com/ydah/notion-client-ruby">Source</a></p>
+    </footer>
+  </body>
+</html>
