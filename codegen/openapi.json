@@ -4898,10 +4898,14 @@
 									"page_id": {
 										"$ref": "#/components/schemas/idResponse",
 										"description": "The ID of the page containing the comment."
+									},
+									"discussion_id": {
+										"$ref": "#/components/schemas/idResponse",
+										"description": "The ID of the discussion containing the comment."
 									}
 								},
 								"additionalProperties": false,
-								"required": ["parent", "page_id"],
+								"required": ["parent", "page_id", "discussion_id"],
 								"description": "Additional event-specific data."
 							}
 						},
@@ -4936,10 +4940,14 @@
 									"page_id": {
 										"$ref": "#/components/schemas/idResponse",
 										"description": "The ID of the page containing the comment."
+									},
+									"discussion_id": {
+										"$ref": "#/components/schemas/idResponse",
+										"description": "The ID of the discussion containing the comment."
 									}
 								},
 								"additionalProperties": false,
-								"required": ["parent", "page_id"],
+								"required": ["parent", "page_id", "discussion_id"],
 								"description": "Additional event-specific data."
 							}
 						},
@@ -5088,10 +5096,14 @@
 									"page_id": {
 										"$ref": "#/components/schemas/idResponse",
 										"description": "The ID of the page containing the comment."
+									},
+									"discussion_id": {
+										"$ref": "#/components/schemas/idResponse",
+										"description": "The ID of the discussion containing the comment."
 									}
 								},
 								"additionalProperties": false,
-								"required": ["parent", "page_id"],
+								"required": ["parent", "page_id", "discussion_id"],
 								"description": "Additional event-specific data."
 							}
 						},
@@ -5962,6 +5974,29 @@
 						"type": "boolean",
 						"description": "Whether the data source is inline."
 					},
+					"database_type": {
+						"oneOf": [
+							{
+								"type": "string",
+								"enum": [
+									"tasks",
+									"projects",
+									"sprints",
+									"docs",
+									"wiki",
+									"meetings",
+									"meeting_notes",
+									"skills",
+									"github_prs"
+								],
+								"description": "One of: `tasks`, `projects`, `sprints`, `docs`, `wiki`, `meetings`, `meeting_notes`, `skills`, `github_prs`"
+							},
+							{
+								"type": "null"
+							}
+						],
+						"description": "The type of typed database this data source belongs to, or `null` for a regular data source."
+					},
 					"in_trash": {
 						"type": "boolean",
 						"description": "Whether the data source is in the trash."
@@ -6038,6 +6073,7 @@
 					"parent",
 					"database_parent",
 					"is_inline",
+					"database_type",
 					"in_trash",
 					"created_time",
 					"last_edited_time",
@@ -6532,6 +6568,29 @@
 						"type": "boolean",
 						"description": "Whether the database is inline."
 					},
+					"database_type": {
+						"oneOf": [
+							{
+								"type": "string",
+								"enum": [
+									"tasks",
+									"projects",
+									"sprints",
+									"docs",
+									"wiki",
+									"meetings",
+									"meeting_notes",
+									"skills",
+									"github_prs"
+								],
+								"description": "One of: `tasks`, `projects`, `sprints`, `docs`, `wiki`, `meetings`, `meeting_notes`, `skills`, `github_prs`"
+							},
+							{
+								"type": "null"
+							}
+						],
+						"description": "The type of typed database, such as `tasks`, `projects`, or `skills`, or `null` for a regular database. Create a database accepts `tasks`, `projects`, and `skills`."
+					},
 					"in_trash": {
 						"type": "boolean",
 						"description": "Whether the database is in the trash."
@@ -6604,6 +6663,7 @@
 					"description",
 					"parent",
 					"is_inline",
+					"database_type",
 					"in_trash",
 					"is_locked",
 					"created_time",
@@ -19448,7 +19508,8 @@
 						"in": "path",
 						"required": true,
 						"schema": {
-							"$ref": "#/components/schemas/idRequest"
+							"$ref": "#/components/schemas/idRequest",
+							"description": "The ID of the user or bot to retrieve."
 						}
 					},
 					{
@@ -21876,7 +21937,8 @@
 						"in": "path",
 						"required": true,
 						"schema": {
-							"$ref": "#/components/schemas/idRequest"
+							"$ref": "#/components/schemas/idRequest",
+							"description": "The ID of the page containing the property."
 						}
 					},
 					{
@@ -21884,7 +21946,8 @@
 						"in": "path",
 						"required": true,
 						"schema": {
-							"type": "string"
+							"type": "string",
+							"description": "The ID or name of the property to retrieve."
 						}
 					},
 					{
@@ -22354,6 +22417,7 @@
 																	"properties": {
 																		"old_str": {
 																			"type": "string",
+																			"minLength": 1,
 																			"description": "The existing content string to find and replace. Must exactly match the page content."
 																		},
 																		"new_str": {
@@ -22627,6 +22691,7 @@
 			"get": {
 				"summary": "Retrieve an async task",
 				"operationId": "retrieve-async-task",
+				"x-notion-sdk-method": "asyncTasks.retrieve",
 				"tags": ["Async tasks"],
 				"x-codeSamples": [
 					{
@@ -27832,6 +27897,11 @@
 										"$ref": "#/components/schemas/initialDataSourceRequest",
 										"description": "Initial data source configuration for the database."
 									},
+									"database_type": {
+										"type": "string",
+										"enum": ["tasks", "projects", "skills"],
+										"description": "Create a typed database with Notion's canonical schema. One of `tasks`, `projects`, or `skills`. Cannot be combined with `initial_data_source`. When `title` is omitted, the database is named after the type."
+									},
 									"icon": {
 										"$ref": "#/components/schemas/pageIconRequest",
 										"description": "The icon for the database."
@@ -28280,6 +28350,7 @@
 			"post": {
 				"summary": "Create a comment",
 				"operationId": "create-a-comment",
+				"x-notion-sdk-method": "comments.create",
 				"tags": ["Comments"],
 				"x-codeSamples": [
 					{
@@ -28648,6 +28719,7 @@
 			"get": {
 				"summary": "List comments",
 				"operationId": "list-comments",
+				"x-notion-sdk-method": "comments.list",
 				"tags": ["Comments"],
 				"x-codeSamples": [
 					{
@@ -29402,27 +29474,27 @@
 									"mode": {
 										"type": "string",
 										"enum": ["single_part", "multi_part", "external_url"],
-										"description": "How the file is being sent. Use `multi_part` for files larger than 20MB. Use `external_url` for files that are temporarily hosted publicly elsewhere. Default is `single_part`."
+										"description": "How the file is sent. Defaults to single_part. Use multi_part for files larger than 20 MiB or external_url for a temporary public HTTPS URL."
 									},
 									"filename": {
 										"type": "string",
 										"examples": ["business_summary.pdf"],
-										"description": "Name of the file to be created. Required when `mode` is `multi_part`. Otherwise optional, and used to override the filename. Must include an extension, or have one inferred from the `content_type` parameter."
+										"description": "The filename. Required for multi_part and external_url uploads. Include an extension or provide content_type so one can be inferred."
 									},
 									"content_type": {
 										"type": "string",
 										"examples": ["application/pdf"],
-										"description": "MIME type of the file to be created. Recommended when sending the file in multiple parts. Must match the content type of the file that's sent, and the extension of the `filename` parameter if any."
+										"description": "The MIME type. It must match the uploaded file and any filename extension."
 									},
 									"number_of_parts": {
 										"type": "integer",
 										"minimum": 1,
 										"maximum": 10000,
-										"description": "When `mode` is `multi_part`, the number of parts you are uploading. This must match the number of parts as well as the final `part_number` you send."
+										"description": "The number of parts in a multi_part upload. Required only for multi_part uploads. This must match the number of uploaded parts and the final part_number sent."
 									},
 									"external_url": {
 										"type": "string",
-										"description": "When `mode` is `external_url`, provide the HTTPS URL of a publicly accessible file to import into your workspace."
+										"description": "A public HTTPS URL to import. Required only for external_url uploads."
 									}
 								}
 							}
@@ -33457,7 +33529,7 @@
 												]
 											},
 											"maxItems": 100,
-											"description": "Meeting note transcription block objects."
+											"description": "Meeting note block objects."
 										},
 										"has_more": {
 											"type": "boolean",
@@ -33587,6 +33659,7 @@
 			"post": {
 				"summary": "Query agents",
 				"operationId": "query-agents",
+				"x-notion-sdk-method": "agents.query",
 				"tags": ["Agents"],
 				"x-codeSamples": [
 					{
@@ -36307,11 +36380,11 @@
 																					"enum": [
 																						"asana",
 																						"box",
-																						"browser",
 																						"calendar",
 																						"computer",
 																						"confluence",
 																						"cursor",
+																						"feedback",
 																						"files",
 																						"fs",
 																						"github",
@@ -36328,11 +36401,13 @@
 																						"marketplace",
 																						"memory",
 																						"microsoft_teams",
+																						"microsoft_teams_oauth",
 																						"outlook",
 																						"salesforce",
 																						"search",
 																						"security",
 																						"sharepoint",
+																						"sharepoint_oauth",
 																						"skills",
 																						"system",
 																						"test",
@@ -36420,6 +36495,7 @@
 																			"failure_limit",
 																			"mark_session_failed_autopause",
 																			"disabled_from_workspace_settings",
+																			"disabled_from_workspace_settings_but_resumable",
 																			"disabled_from_api",
 																			"disabled_from_agent_settings",
 																			"disabled_due_to_no_members_with_access",
@@ -36429,7 +36505,7 @@
 																			"needs_user_review",
 																			"tool_unavailable"
 																		],
-																		"description": "One of: `run_limit`, `credit_limit`, `runaway_credit_usage`, `workspace_credit_limit`, `failure_limit`, `mark_session_failed_autopause`, `disabled_from_workspace_settings`, `disabled_from_api`, `disabled_from_agent_settings`, `disabled_due_to_no_members_with_access`, `disabled_due_to_lack_of_editors`, `disabled_by_notion`, `internal_error`, `needs_user_review`, `tool_unavailable`"
+																		"description": "One of: `run_limit`, `credit_limit`, `runaway_credit_usage`, `workspace_credit_limit`, `failure_limit`, `mark_session_failed_autopause`, `disabled_from_workspace_settings`, `disabled_from_workspace_settings_but_resumable`, `disabled_from_api`, `disabled_from_agent_settings`, `disabled_due_to_no_members_with_access`, `disabled_due_to_lack_of_editors`, `disabled_by_notion`, `internal_error`, `needs_user_review`, `tool_unavailable`"
 																	},
 																	{
 																		"type": "null"
@@ -37393,11 +37469,11 @@
 																					"enum": [
 																						"asana",
 																						"box",
-																						"browser",
 																						"calendar",
 																						"computer",
 																						"confluence",
 																						"cursor",
+																						"feedback",
 																						"files",
 																						"fs",
 																						"github",
@@ -37414,11 +37490,13 @@
 																						"marketplace",
 																						"memory",
 																						"microsoft_teams",
+																						"microsoft_teams_oauth",
 																						"outlook",
 																						"salesforce",
 																						"search",
 																						"security",
 																						"sharepoint",
+																						"sharepoint_oauth",
 																						"skills",
 																						"system",
 																						"test",
@@ -37810,6 +37888,7 @@
 			"get": {
 				"summary": "Get agent",
 				"operationId": "get-agent",
+				"x-notion-sdk-method": "agents.retrieve",
 				"tags": ["Agents"],
 				"x-codeSamples": [
 					{
@@ -38576,11 +38655,11 @@
 																"enum": [
 																	"asana",
 																	"box",
-																	"browser",
 																	"calendar",
 																	"computer",
 																	"confluence",
 																	"cursor",
+																	"feedback",
 																	"files",
 																	"fs",
 																	"github",
@@ -38597,11 +38676,13 @@
 																	"marketplace",
 																	"memory",
 																	"microsoft_teams",
+																	"microsoft_teams_oauth",
 																	"outlook",
 																	"salesforce",
 																	"search",
 																	"security",
 																	"sharepoint",
+																	"sharepoint_oauth",
 																	"skills",
 																	"system",
 																	"test",
@@ -38689,6 +38770,7 @@
 														"failure_limit",
 														"mark_session_failed_autopause",
 														"disabled_from_workspace_settings",
+														"disabled_from_workspace_settings_but_resumable",
 														"disabled_from_api",
 														"disabled_from_agent_settings",
 														"disabled_due_to_no_members_with_access",
@@ -38698,7 +38780,7 @@
 														"needs_user_review",
 														"tool_unavailable"
 													],
-													"description": "One of: `run_limit`, `credit_limit`, `runaway_credit_usage`, `workspace_credit_limit`, `failure_limit`, `mark_session_failed_autopause`, `disabled_from_workspace_settings`, `disabled_from_api`, `disabled_from_agent_settings`, `disabled_due_to_no_members_with_access`, `disabled_due_to_lack_of_editors`, `disabled_by_notion`, `internal_error`, `needs_user_review`, `tool_unavailable`"
+													"description": "One of: `run_limit`, `credit_limit`, `runaway_credit_usage`, `workspace_credit_limit`, `failure_limit`, `mark_session_failed_autopause`, `disabled_from_workspace_settings`, `disabled_from_workspace_settings_but_resumable`, `disabled_from_api`, `disabled_from_agent_settings`, `disabled_due_to_no_members_with_access`, `disabled_due_to_lack_of_editors`, `disabled_by_notion`, `internal_error`, `needs_user_review`, `tool_unavailable`"
 												},
 												{
 													"type": "null"
@@ -39138,6 +39220,7 @@
 			"delete": {
 				"summary": "Delete agent",
 				"operationId": "delete-agent",
+				"x-notion-sdk-method": "agents.delete",
 				"tags": ["Agents"],
 				"x-codeSamples": [
 					{
@@ -39314,6 +39397,7 @@
 			"get": {
 				"summary": "Get agent insights",
 				"operationId": "get-agent-insights",
+				"x-notion-sdk-method": "agents.retrieveInsights",
 				"tags": ["Agents"],
 				"x-codeSamples": [
 					{
@@ -39378,15 +39462,28 @@
 											"description": "Always `agent_insights`"
 										},
 										"id": {
-											"$ref": "#/components/schemas/idResponse"
+											"oneOf": [
+												{
+													"$ref": "#/components/schemas/idResponse"
+												},
+												{
+													"type": "string",
+													"const": "notion_ai",
+													"description": "Always `notion_ai`"
+												}
+											]
 										},
 										"name": {
 											"type": "string"
 										},
 										"agent_type": {
 											"type": "string",
-											"enum": ["custom_agent", "autofill_custom_agent"],
-											"description": "One of: `custom_agent`, `autofill_custom_agent`"
+											"enum": [
+												"notion_ai",
+												"custom_agent",
+												"autofill_custom_agent"
+											],
+											"description": "One of: `notion_ai`, `custom_agent`, `autofill_custom_agent`"
 										},
 										"status": {
 											"type": "string",
@@ -39405,6 +39502,7 @@
 														"failure_limit",
 														"mark_session_failed_autopause",
 														"disabled_from_workspace_settings",
+														"disabled_from_workspace_settings_but_resumable",
 														"disabled_from_api",
 														"disabled_from_agent_settings",
 														"disabled_due_to_no_members_with_access",
@@ -39414,7 +39512,7 @@
 														"needs_user_review",
 														"tool_unavailable"
 													],
-													"description": "One of: `run_limit`, `credit_limit`, `runaway_credit_usage`, `workspace_credit_limit`, `failure_limit`, `mark_session_failed_autopause`, `disabled_from_workspace_settings`, `disabled_from_api`, `disabled_from_agent_settings`, `disabled_due_to_no_members_with_access`, `disabled_due_to_lack_of_editors`, `disabled_by_notion`, `internal_error`, `needs_user_review`, `tool_unavailable`"
+													"description": "One of: `run_limit`, `credit_limit`, `runaway_credit_usage`, `workspace_credit_limit`, `failure_limit`, `mark_session_failed_autopause`, `disabled_from_workspace_settings`, `disabled_from_workspace_settings_but_resumable`, `disabled_from_api`, `disabled_from_agent_settings`, `disabled_due_to_no_members_with_access`, `disabled_due_to_lack_of_editors`, `disabled_by_notion`, `internal_error`, `needs_user_review`, `tool_unavailable`"
 												},
 												{
 													"type": "null"
@@ -39681,6 +39779,7 @@
 														"failure_limit",
 														"mark_session_failed_autopause",
 														"disabled_from_workspace_settings",
+														"disabled_from_workspace_settings_but_resumable",
 														"disabled_from_api",
 														"disabled_from_agent_settings",
 														"disabled_due_to_no_members_with_access",
@@ -39690,7 +39789,7 @@
 														"needs_user_review",
 														"tool_unavailable"
 													],
-													"description": "One of: `run_limit`, `credit_limit`, `runaway_credit_usage`, `workspace_credit_limit`, `failure_limit`, `mark_session_failed_autopause`, `disabled_from_workspace_settings`, `disabled_from_api`, `disabled_from_agent_settings`, `disabled_due_to_no_members_with_access`, `disabled_due_to_lack_of_editors`, `disabled_by_notion`, `internal_error`, `needs_user_review`, `tool_unavailable`"
+													"description": "One of: `run_limit`, `credit_limit`, `runaway_credit_usage`, `workspace_credit_limit`, `failure_limit`, `mark_session_failed_autopause`, `disabled_from_workspace_settings`, `disabled_from_workspace_settings_but_resumable`, `disabled_from_api`, `disabled_from_agent_settings`, `disabled_due_to_no_members_with_access`, `disabled_due_to_lack_of_editors`, `disabled_by_notion`, `internal_error`, `needs_user_review`, `tool_unavailable`"
 												},
 												{
 													"type": "null"
@@ -40038,6 +40137,7 @@
 			"post": {
 				"summary": "Apply many agent operations",
 				"operationId": "agent-batch",
+				"x-notion-sdk-method": "agents.batch",
 				"tags": ["Agents"],
 				"x-codeSamples": [
 					{
@@ -40372,6 +40472,7 @@
 			"post": {
 				"summary": "Update a session",
 				"operationId": "update-session",
+				"x-notion-sdk-method": "sessions.update",
 				"tags": ["Sessions"],
 				"x-codeSamples": [
 					{
@@ -40751,6 +40852,7 @@
 			"get": {
 				"summary": "Retrieve a session",
 				"operationId": "retrieve-session",
+				"x-notion-sdk-method": "sessions.retrieve",
 				"tags": ["Sessions"],
 				"x-codeSamples": [
 					{
@@ -41169,6 +41271,7 @@
 			"post": {
 				"summary": "Query sessions",
 				"operationId": "query-sessions",
+				"x-notion-sdk-method": "sessions.query",
 				"tags": ["Sessions"],
 				"x-codeSamples": [
 					{
@@ -42586,10 +42689,12 @@
 													"updated_at"
 												]
 											},
-											"maxItems": 100
+											"maxItems": 100,
+											"description": "Sessions found in this bounded scan. Access filtering can leave this array empty while has_more is true."
 										},
 										"has_more": {
-											"type": "boolean"
+											"type": "boolean",
+											"description": "Whether more session candidates remain after this bounded scan."
 										},
 										"next_cursor": {
 											"oneOf": [
@@ -42599,7 +42704,8 @@
 												{
 													"type": "null"
 												}
-											]
+											],
+											"description": "Pass this cursor as start_cursor when has_more is true, even when results is empty."
 										}
 									},
 									"additionalProperties": false,
@@ -42732,6 +42838,7 @@
 			"post": {
 				"summary": "Query session events",
 				"operationId": "query-session-events",
+				"x-notion-sdk-method": "sessions.queryEvents",
 				"tags": ["Sessions"],
 				"x-codeSamples": [
 					{
@@ -45752,6 +45859,7 @@
 			"post": {
 				"summary": "Cancel a session",
 				"operationId": "cancel-session",
+				"x-notion-sdk-method": "sessions.cancel",
 				"tags": ["Sessions"],
 				"x-codeSamples": [
 					{

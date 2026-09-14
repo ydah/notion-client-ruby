@@ -8,7 +8,7 @@ module Notion
       class Databases < Notion::Endpoints::Base
       operation :retrieve, :get, "/v1/databases/{database_id}", path: ["database_id"], query: [], query_rules: { required: [], enums: {}, max_lengths: {} }, body_rules: { send_empty: false, required: [], variants: [], enums: {}, max_lengths: {} }
       operation :update, :patch, "/v1/databases/{database_id}", path: ["database_id"], query: [], query_rules: { required: [], enums: {}, max_lengths: {} }, body_rules: { send_empty: true, required: [], variants: [], enums: {}, max_lengths: {} }
-      operation :create, :post, "/v1/databases", path: [], query: [], query_rules: { required: [], enums: {}, max_lengths: {} }, body_rules: { send_empty: true, required: ["parent"], variants: [["parent"]], enums: {}, max_lengths: {} }
+      operation :create, :post, "/v1/databases", path: [], query: [], query_rules: { required: [], enums: {}, max_lengths: {} }, body_rules: { send_empty: true, required: ["parent"], variants: [["parent"]], enums: {"database_type" => ["tasks", "projects", "skills"]}, max_lengths: {} }
 
     # Retrieve a database
     # @see https://developers.notion.com/reference/retrieve-database
